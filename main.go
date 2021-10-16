@@ -1,8 +1,8 @@
 package main
 
 import (
+	"UserManagementSystem/routers"
 	"fmt"
-	"lvs_usermanage_app/routers"
 	"net/http"
 )
 
