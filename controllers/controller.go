@@ -29,11 +29,11 @@ func BaseInformation(w http.ResponseWriter, r *http.Request) {
 
 	//默认初始化数据
 	Users = []*models.User{
-		{1, "xx", "运维部", "北京市", true, 3000},
-		{2, "xx", "项目管理", "北京市", false, 6000},
-		{3, "xx", "研发部", "北京市", true, 5000},
-		{4, "xx", "产品部", "北京市", true, 9000},
-		{5, "xx", "Siteops", "北京市", true, 8000},
+		{1, "杨旭", "运维部", "北京市", true, 3000},
+		{2, "张福权", "项目管理", "北京市", false, 6000},
+		{3, "张宝义", "研发部", "北京市", true, 5000},
+		{4, "陈国荣", "产品部", "北京市", true, 9000},
+		{5, "贾强军", "Siteops", "北京市", true, 8000},
 	}
 
 	//读取持久化Json内容
@@ -61,7 +61,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	if r.Method == "GET" {
 		tpl := template.Must(template.ParseFiles("templates/create.html"))
-		tpl.ExecuteTemplate(w, "create.html", Users)
+		if err := tpl.ExecuteTemplate(w, "create.html", Users); err != nil {
+			log.Fatalln(err)
+		}
 	} else if r.Method == "POST" {
 		//添加用户信息
 		sal, _ := strconv.Atoi(r.FormValue("salary"))
