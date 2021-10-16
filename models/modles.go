@@ -7,4 +7,5 @@ type User struct {
 	Addr       string
 	Sex        bool
 	Salary     int
+	Phone      string
 }

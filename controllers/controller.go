@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"text/template"
 )
 
@@ -29,11 +30,11 @@ func BaseInformation(w http.ResponseWriter, r *http.Request) {
 
 	//默认初始化数据
 	Users = []*models.User{
-		{1, "杨旭", "运维部", "北京市", true, 3000},
-		{2, "张福权", "项目管理", "北京市", false, 6000},
-		{3, "张宝义", "研发部", "北京市", true, 5000},
-		{4, "陈国荣", "产品部", "北京市", true, 9000},
-		{5, "贾强军", "Siteops", "北京市", true, 8000},
+		{1, "杨旭", "运维部", "北京市", true, 3000, "13716977836"},
+		{2, "张福权", "项目管理", "北京市", false, 6000, "10086"},
+		{3, "张宝义", "研发部", "北京市", true, 5000, "12306"},
+		{4, "陈国荣", "产品部", "北京市", true, 9000, "10086"},
+		{5, "贾强军", "Siteops", "北京市", true, 8000, "10085"},
 	}
 
 	//读取持久化Json内容
@@ -76,6 +77,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 			Addr:       r.FormValue("addr"),
 			Sex:        r.FormValue("sex") == "0",
 			Salary:     sal,
+			Phone:      r.FormValue("phone"),
 		})
 
 		//将数据存储到Json
@@ -83,4 +85,37 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	}
 	http.Redirect(w, r, "/", 302)
+}
+
+//查询用户
+func QueryUser(w http.ResponseWriter, r *http.Request) {
+	TempUser := []*models.User{}
+
+	if r.Method == "GET" {
+		tpl := template.Must(template.ParseFiles("templates/query.html"))
+		tpl.ExecuteTemplate(w, "query.html", nil)
+	} else {
+		QueryInfo := r.FormValue("info")
+
+		for _, users := range Users {
+			if strings.Contains(QueryInfo, users.Name) ||
+				strings.Contains(QueryInfo, users.Addr) ||
+				strings.Contains(QueryInfo, users.Department) ||
+				strings.Contains(QueryInfo, strconv.Itoa(users.Salary)) ||
+				strings.Contains(QueryInfo, users.Phone) {
+				TempUser = append(TempUser, users)
+			}
+		}
+		if len(TempUser) == 0 || QueryInfo == "" {
+			Messages := "User Is Null"
+			tpl := template.Must(template.ParseFiles("templates/error.html"))
+			tpl.ExecuteTemplate(w, "error.html", Messages)
+		}
+
+		tpl := template.Must(template.ParseFiles("templates/query.html"))
+		tpl.ExecuteTemplate(w, "query.html", TempUser)
+		//TempUser = TempUser[:0]
+
+	}
+
 }

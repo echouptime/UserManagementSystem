@@ -8,5 +8,5 @@ import (
 func Register() {
 	http.HandleFunc("/", controllers.BaseInformation)
 	http.HandleFunc("/create/", controllers.CreateUser)
-	http.HandleFunc("/query/", controllers.CreateUser)
+	http.HandleFunc("/query/", controllers.QueryUser)
 }
