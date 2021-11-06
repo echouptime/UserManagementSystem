@@ -8,7 +8,6 @@
 
 
 <a href="/create/" >新建用户</a>
-<a href="">编辑用户</a>
 <a href="/query/">查询用户</a>
 
 <br>
@@ -17,12 +16,13 @@
         <thead >
             <tr bgcolor="#ffe4c4">
                 <td width="10%">ID</td>
-                <td width="10%" >姓名</td>
-                <td width="10%" >性别</td>
-                <td width="10%">部门</td>
+                <td width="15%" >姓名</td>
+                <td width="13%" >性别</td>
+                <td width="15%">部门</td>
                 <td width="10%">薪资</td>
-                <td width="10%">联系方式</td>
+                <td width="20%">联系方式</td>
                 <td width="10%">住址</td>
+                <td >操作</td>
             </tr>
         </thead>
 
@@ -36,6 +36,10 @@
             <td>{{ .Salary }}</td>
             <td>{{ .Phone }}</td>
             <td>{{ .Addr }}</td>
+            <td>
+            <a href="/delete/?id={{ .Id }}" type="button" >删除</a>
+            <a href="/update/?id={{ .Id }}" type="button" >修改</a>
+            </td>
         </tr>
         {{ end }}
         </tbody>

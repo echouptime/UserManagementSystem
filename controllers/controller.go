@@ -114,8 +114,62 @@ func QueryUser(w http.ResponseWriter, r *http.Request) {
 
 		tpl := template.Must(template.ParseFiles("templates/query.html"))
 		tpl.ExecuteTemplate(w, "query.html", TempUser)
-		//TempUser = TempUser[:0]
 
 	}
+}
 
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	Tuser := []*models.User{}
+	//fmt.Println(uid)
+	if r.Method == "GET" {
+		uid, _ := strconv.Atoi(r.FormValue("id"))
+		for _, user := range Users {
+			if user.Id == uid {
+				Tuser = append(Tuser, user)
+				tpl := template.Must(template.ParseFiles("templates/update.html"))
+				tpl.ExecuteTemplate(w, "update.html", Tuser)
+			}
+		}
+	} else {
+
+		sal, _ := strconv.Atoi(r.FormValue("salary"))
+
+		if id, err := strconv.Atoi(r.FormValue("id")); err == nil {
+			fmt.Println(r.FormValue("department"))
+			for uid, user := range Users {
+				if id == user.Id {
+					Users[uid] = &models.User{
+						Id:         id,
+						Name:       r.FormValue("name"),
+						Sex:        r.FormValue("sex") == "0",
+						Salary:     sal,
+						Phone:      r.FormValue("phone"),
+						Department: r.FormValue("department"),
+						Addr:       r.FormValue("addr"),
+					}
+				}
+			}
+		} else {
+			fmt.Println(err)
+		}
+		utils.SaveDb(Users)
+	}
+	http.Redirect(w, r, "/", 302)
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	Tuser := make([]*models.User, 0, len(Users))
+	if deleteId, err := strconv.Atoi(r.FormValue("id")); err == nil {
+		for _, user := range Users {
+			if deleteId == user.Id {
+				continue
+			} else {
+				fmt.Println(user.Name)
+				Tuser = append(Tuser, user)
+			}
+			Users = Tuser
+		}
+		utils.SaveDb(Users)
+	}
+	http.Redirect(w, r, "/", 302)
 }

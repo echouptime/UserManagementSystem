@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户</title>
+</head>
+<body>
+
+<form action="/update/" method="post" >
+    {{ range. }}
+    <label >ID: </label><input name="id" value=""  placeholder="{{ .Id }} " ><br>
+    <label >用户名: </label><input name="name" value="" placeholder="{{ .Name }}"><br>
+    <label>性别: </label>
+    {{ if .Sex }}
+    <input type="radio" name="sex"  value="0" checked> 男
+    <input type="radio" name="sex"  value="1"> 女
+    {{ else }}
+    <input type="radio" name="sex"  value="0"> 男
+    <input type="radio" name="sex"  value="1" checked> 女
+    {{ end }}
+    <br>
+    <label>部门: </label><input name="department" value="" placeholder="{{ .Department }}" ><br>
+    <label>住址: </label><input name="addr" value="" placeholder="{{ .Addr }}" width="auto"><br>
+    <label>联系方式: </label><input name="phone" value="" placeholder="{{ .Phone }}" ><br>
+    <label>薪资: </label><input name="salary" value="" placeholder="{{ .Salary }}"><br>
+    <input type="submit" value="提交">
+    {{ end }}
+</form>
+
+</body>
+</html>
